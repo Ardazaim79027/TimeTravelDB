@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<title>TimeTravelDB+</title>
+
+<style>
+
+body{
+font-family:Arial;
+margin:40px;
+background:#f5f5f5;
+}
+
+.container{
+width:700px;
+margin:auto;
+padding:20px;
+border-radius:10px;
+border:1px solid lightgray;
+background:white;
+}
+
+button{
+padding:10px;
+margin:5px;
+cursor:pointer;
+}
+
+input{
+padding:10px;
+width:300px;
+margin:5px;
+}
+
+pre{
+background:#f3f3f3;
+padding:15px;
+margin-top:20px;
+white-space:pre-wrap;
+border-radius:5px;
+min-height:100px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>TimeTravelDB+</h1>
+
+<h3>Temporal Database Query System</h3>
+
+<button onclick="getHistory()">
+Show History
+</button>
+
+<button onclick="compare()">
+Compare
+</button>
+
+<button onclick="explain()">
+Explain
+</button>
+
+<button onclick="stats()">
+Statistics
+</button>
+
+<br><br>
+
+<h3>Add User</h3>
+
+<input
+id="nameInput"
+placeholder="Name"
+>
+
+<input
+id="emailInput"
+placeholder="Email"
+>
+
+<button onclick="addUser()">
+Add User
+</button>
+
+<br><br>
+
+<h3>Search History</h3>
+
+<input
+id="queryInput"
+placeholder="insert / update"
+>
+
+<button onclick="ask()">
+Search
+</button>
+
+<pre id="output">
+Results appear here
+</pre>
+
+</div>
+
+<script>
+
+async function getHistory(){
+
+try{
+
+let response=
+await fetch(
+'http://127.0.0.1:8000/history'
+);
+
+let data=
+await response.json();
+
+document.getElementById(
+'output'
+).innerText=
+JSON.stringify(data,null,2);
+
+}
+
+catch(error){
+
+document.getElementById(
+'output'
+).innerText=
+"Backend not connected";
+
+}
+
+}
+
+
+async function compare(){
+
+try{
+
+let response=
+await fetch(
+'http://127.0.0.1:8000/compare'
+);
+
+let data=
+await response.json();
+
+document.getElementById(
+'output'
+).innerText=
+JSON.stringify(data,null,2);
+
+}
+
+catch(error){
+
+document.getElementById(
+'output'
+).innerText=
+"Backend not connected";
+
+}
+
+}
+
+
+async function explain(){
+
+try{
+
+let response=
+await fetch(
+'http://127.0.0.1:8000/explain'
+);
+
+let data=
+await response.json();
+
+document.getElementById(
+'output'
+).innerText=
+JSON.stringify(data,null,2);
+
+}
+
+catch(error){
+
+document.getElementById(
+'output'
+).innerText=
+"Backend not connected";
+
+}
+
+}
+
+
+async function stats(){
+
+try{
+
+let response=
+await fetch(
+'http://127.0.0.1:8000/stats'
+);
+
+let data=
+await response.json();
+
+document.getElementById(
+'output'
+).innerText=
+JSON.stringify(data,null,2);
+
+}
+
+catch(error){
+
+document.getElementById(
+'output'
+).innerText=
+"Backend not connected";
+
+}
+
+}
+
+
+async function ask(){
+
+try{
+
+let question=
+document.getElementById(
+'queryInput'
+).value;
+
+let response=
+await fetch(
+`http://127.0.0.1:8000/query/${question}`
+);
+
+let data=
+await response.json();
+
+document.getElementById(
+'output'
+).innerText=
+JSON.stringify(data,null,2);
+
+}
+
+catch(error){
+
+document.getElementById(
+'output'
+).innerText=
+"Backend not connected";
+
+}
+
+}
+
+
+async function addUser(){
+
+try{
+
+let name=
+document.getElementById(
+'nameInput'
+).value;
+
+let email=
+document.getElementById(
+'emailInput'
+).value;
+
+let response=
+await fetch(
+'http://127.0.0.1:8000/add_user',
+{
+
+method:'POST',
+
+headers:{
+'Content-Type':'application/json'
+},
+
+body:JSON.stringify({
+
+name:name,
+email:email
+
+})
+
+}
+);
+
+let data=
+await response.json();
+
+document.getElementById(
+'output'
+).innerText=
+JSON.stringify(data,null,2);
+
+document.getElementById(
+'nameInput'
+).value='';
+
+document.getElementById(
+'emailInput'
+).value='';
+
+}
+
+catch(error){
+
+document.getElementById(
+'output'
+).innerText=
+"Insert failed";
+
+}
+
+}
+
+</script>
+
+</body>
+
+</html>
